@@ -1,0 +1,691 @@
+QUESTION & ANSWER ANNOTATION
+Multi-Image High-Resolution Visual Search  |  K = 1, N = 20  |  Hướng dẫn dành cho annotator
+1. BẮT ĐẦU Ở ĐÂY
+Đọc phần này trước khi mở platform; những phần sau hướng dẫn cách tạo từng sample và tự kiểm tra chất lượng.
+MỤC TIÊU:  Từ một ảnh UHD, tạo 01 câu hỏi về một target rất nhỏ; sau đó chọn thêm 19 ảnh distractor. Trong cả 20 ảnh, chỉ 01 ảnh duy nhất chứa đủ bằng chứng để trả lời câu hỏi.
+
+MỖI ANNOTATOR CẦN BÀN GIAO
+Số lượng
+Một sample gồm
+Hình thức bàn giao
+100 samples
+01 GT Image + 19 OtherImages (N = 20); K = 1; 01 Q&A tiếng Anh; 01 target bbox
+Hoàn thành và export trực tiếp từ annotation platform
+Deadline
+23:59, ngày 02/11/2026 (giờ Việt Nam)
+Chỉ tính sample đã kiểm tra và lưu đầy đủ
+
+5 điều phải nhớ
+#
+Quy tắc
+Ý cần hiểu ngay
+01
+Một GT hợp lệ
+Chỉ GT Image trả lời được question; không có OtherImage nào trả lời được, kể cả cùng answer.
+02
+Một target duy nhất
+Trong GT, chỉ 01 instance thỏa tất cả cues; target phải có thể vẽ 01 bbox.
+03
+Question cần visual search
+Cần zoom/tìm chi tiết thật; question/answer bằng English; không đoán từ chữ trong câu hỏi.
+04
+Bbox rất nhỏ
+Target bbox / diện tích ảnh < 0.1%; vẽ sát phần nhìn thấy của target.
+05
+Không chắc thì sửa/bỏ
+Không submit câu mơ hồ, câu có nhiều GT, ảnh distractor có thể trả lời hoặc bbox không đạt.
+
+3 QUESTION TYPES ĐƯỢC PHÉP
+Attribute
+Spatial · Answer
+Relation
+Hỏi thuộc tính nhìn thấy của target; cue chính là đặc điểm/thuộc tính.
+Hỏi VỊ TRÍ TƯƠNG ĐỐI của target so với 1–2 objects làm mốc.
+Dùng tương tác nhìn thấy giữa objects để xác định target; hỏi một thuộc tính khác.
+
+
+2. CHỌN GT IMAGE & TARGET
+Tạo Q&A trên một GT Image trước. Chỉ chuyển sang chọn OtherImages khi GT đã có question, answer và target bbox hợp lệ.
+2.1. Chọn GT Image
+•  Sử dụng ảnh độ phân giải cao/UHD theo nguồn ảnh được phân công; giữ nguyên ảnh gốc, không tự upscale hoặc thay nội dung ảnh.
+•  Ưu tiên cảnh thực tế nhiều objects, nhiều distractors và các chi tiết nhỏ phải zoom mới nhận diện rõ.
+•  Một GT Image chỉ được sử dụng cho một sample. Nếu cùng ảnh có nhiều câu hay, chỉ chọn 01 câu tốt nhất.
+•  Không chọn ảnh mà target bị mờ, khuất đến mức phải đoán, hoặc chỉ có thể trả lời bằng suy luận ngoài ảnh.
+2.2. Target nào được chọn?
+•  Target là 01 object instance cụ thể, không phải nhóm người/vật hoặc toàn bộ vùng ảnh.
+•  Target phải xác định duy nhất qua toàn bộ cues trong question; kiểm tra cả các object tương tự trong ảnh.
+•  Được zoom sâu và chấp nhận che khuất một phần, nhưng bbox chỉ bao phần thực sự nhìn thấy.
+•  Không bắt buộc nhãn SAME/DIFFERENT hay primary density category; không có quota loại object.
+2.3. Điều kiện bắt buộc: target bbox < 0.1%
+CÔNG THỨC:  bbox_area_ratio = (bbox_width × bbox_height) / (image_width × image_height) < 0.001. Dùng kích thước pixel ảnh gốc, không dùng kích thước thumbnail hiển thị.
+
+Ví dụ: ảnh 3840 × 2160 có diện tích 8,294,400 px²; target bbox phải có diện tích nhỏ hơn 8,294.4 px². Một bbox 60 × 100 = 6,000 px² đạt; bbox 100 × 100 = 10,000 px² không đạt.
+5 BƯỚC TẠO MỘT SAMPLE
+1.  Chọn GT Image và đúng 01 target nhỏ.
+2.  Chọn question type; viết 01 Question và 01 Answer (English).
+3.  Vẽ target bbox; kiểm tra tỷ lệ diện tích dưới 0.1%.
+4.  Chọn 19 OtherImages; kiểm tra từng ảnh không thể trả lời Q.
+5.  Kiểm tra toàn sample K = 1, N = 20 rồi lưu/export trên platform.
+
+3. CHỌN QUESTION TYPE
+PHÂN LOẠI:  Spatial là ngoại lệ có ưu tiên: nếu question hỏi VỊ TRÍ TƯƠNG ĐỐI, gán Spatial. Với các câu khác, Attribute/Relation được phân theo cue chính. Không tạo loại Spatial-cued Attribute: spatial có thể là cue phụ trong Attribute nhưng không phải cue chính.
+
+ANSWER TYPES ĐƯỢC PHÉP
+Answer Type
+Example Answer
+Quy tắc áp dụng
+Color
+Red; navy blue
+Màu sắc nhìn thấy rõ trên target hoặc chi tiết gắn với target.
+Shape
+Circular; triangular
+Hình dạng/đặc điểm cấu trúc thấy trực tiếp.
+Pattern / Marking
+Striped; checkered
+Họa tiết thị giác; tuyệt đối không đọc chữ, số hoặc logo có ký tự.
+Object / Accessory
+A helmet; a camera
+Tên vật/phụ kiện nhìn thấy rõ của target.
+Visible Action
+Clapping; waving
+Chỉ hành động thể hiện rõ trong ảnh tĩnh.
+Physical State
+Open; folded; raised
+Trạng thái trực tiếp từ pixels; không hỏi Yes/No.
+Spatial Position
+To the left of the bicycle
+CHỈ dùng cho type Spatial; answer là quan hệ với object mốc.
+
+ANSWER TYPES / CUES BỊ CẤM
+KHÔNG DÙNG
+QUY TẮC
+OCR / Text / Digits
+Không hỏi và không dùng chữ/số trên biển hiệu, nhãn, biển số, áo... để định danh target.
+Count
+Không “How many...?”; không đếm objects hoặc bộ phận kể cả trong 01 object.
+Presence / Yes–No
+Không “Is there...?”, “Does it have...?”, “Is X left of Y?” hoặc answer Yes/No.
+Material / Subjective
+Không đoán chất liệu, cảm xúc, giá trị, chất lượng, mục đích, quyền sở hữu.
+
+LƯU Ý:  Các ví dụ tiếp theo là tình huống giả định, không phải Q&A để sao chép. Chỉ submit nếu mọi cue, relation và answer đều đúng trên ảnh thực tế.
+
+
+3.1. ATTRIBUTE — THUỘC TÍNH
+Cue chính dùng để tìm target là thuộc tính nhìn thấy của chính target (màu, hoa văn, hình dạng, phụ kiện...). Có thể thêm cue phụ (kể cả spatial), nhưng cue CHÍNH vẫn phải là attribute của target; answer phải hỏi chi tiết CHƯA bị lộ.
+Target / Cue
+QUESTION (ENGLISH) · ANSWER
+Answer Type
+PersonCheckered jacket
+Q What headwear is the person in the checkered jacket wearing?A A beanie.
+Object / Accessory
+PersonOrange backpack
+Q What pattern is on the scarf worn by the person with the bright orange backpack?A Striped.
+Pattern / Marking
+BicycleWoven front basket
+Q What item is attached to the handlebar of the bicycle with the woven front basket?A A bell.
+Object / Accessory
+MotorcyclePatterned seat cover
+Q What shape is the side mirror of the motorcycle with the patterned seat cover?A Oval.
+Shape
+DogSpotted coat
+Q What shape is the collar tag on the spotted dog?A Heart-shaped.
+Shape
+CarRoof rack
+Q How is the rear window of the car with the long roof rack positioned?A Partially open.
+Physical State
+Person / Yellow raincoat
+Q What color is the zipper pull on the backpack carried by the person wearing a yellow raincoat?
+A Orange.
+Color
+Person / Floral shirt
+Q What kind of bag is the person wearing the floral shirt carrying?
+A A crossbody bag.
+Object / Accessory
+Person / Zigzag scarf
+Q What shape are the lenses of the glasses worn by the person with the zigzag-patterned scarf?
+A Round.
+Shape
+Person / Purple cap
+Q What color are the shoelaces worn by the person in the purple cap?
+A White.
+Color
+Person / Diamond-patterned dress
+Q What accessory is attached to the belt of the person wearing the diamond-patterned dress?
+A A small pouch.
+Object / Accessory
+Cyclist / Lime-green helmet
+Q What pattern is on the socks worn by the cyclist in the lime-green helmet?
+A Striped.
+Pattern / Marking
+Vendor / Red apron
+Q How is the folding fan held by the vendor wearing the red apron positioned?
+A Folded.
+Physical State
+Bicycle / Green front crate
+Q What color is the bell on the bicycle with the green front crate?
+A Blue.
+Color
+Scooter / Striped seat cover
+Q What shape is the right-side mirror on the scooter with the striped seat cover?
+A Rectangular.
+Shape
+Car / Black roof cargo box
+Q What color is the fastening strap on the car with the black roof cargo box?
+A Orange.
+Color
+Dog / White-tipped ears
+Q What color is the collar on the dog with white-tipped ears?
+A Turquoise.
+Color
+Cat / White paws
+Q What pattern is on the collar worn by the cat with white paws?
+A Polka dots.
+Pattern / Marking
+Mannequin / Green jacket
+Q What headwear is the mannequin in the green jacket wearing?
+A A knitted cap.
+Object / Accessory
+Umbrella / Yellow polka dots
+Q What color is the handle of the umbrella with yellow polka dots?
+A Black.
+Color
+Flowerpot / Blue stripes
+Q What shape is the rim of the flowerpot with blue stripes?
+A Hexagonal.
+Shape
+Shopping trolley / Orange frame
+Q What accessory hangs from the handle of the shopping trolley with the bright orange frame?
+A A small padlock.
+Object / Accessory
+Pigeon / Dark wing patch
+Q What color is the leg band on the pigeon with a dark patch on its left wing?
+A Yellow.
+Color
+Tote bag / Star-shaped patch
+Q What kind of closure does the tote bag with the star-shaped patch have?
+A A zipper.
+Object / Accessory
+Helmet / Lightning-bolt marking
+Q What color is the chin strap of the helmet with the lightning-bolt marking?
+A Red.
+Color
+Bicycle / Floral basket liner
+Q How is the kickstand of the bicycle with the floral basket liner positioned?
+A Lowered.
+Physical State
+
+TỰ KIỂM ĐỐI VỚI ATTRIBUTE
+•  Attribute dùng làm cue không được trùng với chính thông tin bị hỏi; ví dụ “What color is the red bag?” là invalid.
+•  Nếu có hai người cùng áo kẻ, thêm một cue khác thấy rõ để duy nhất; không sửa bằng vị trí quá mơ hồ.
+•  Target bbox là instance mà question đang định danh (ví dụ: person), không tự chuyển sang phụ kiện xuất hiện trong answer.
+•  Bất kỳ ví dụ nào chỉ hợp lệ khi bbox instance đã chọn thực sự dưới 0.1% ảnh.
+
+3.2. SPATIAL — VỊ TRÍ LÀ ANSWER
+ĐỊNH NGHĨA:  Spatial Question phải hỏi quan hệ vị trí giữa một target nhỏ và 1–2 discrete reference objects. Answer là vị trí tương đối như “To the left of ...”, KHÔNG phải màu sắc/phụ kiện/hành động.
+
+Để trả lời, cần xác định đúng target và các object làm mốc trong ảnh, sau đó so sánh vị trí tương đối của chúng. Viết đáp án dạng free-form text, không dùng trắc nghiệm.
+Các spatial relations nên sử dụng
+Subtype
+Answer mẫu
+Điều kiện áp dụng
+Left / Right
+To the left of the bicycle.
+Ưu tiên; hiểu theo hướng người xem nhìn vào ảnh.
+Above / Below
+Below the red umbrella.
+Ưu tiên; xác định rõ theo vị trí trong ảnh.
+Between
+Between the two parked bicycles.
+Cho phép; cần 2 references xác định duy nhất.
+In front of / Behind
+In front of the green cart.
+Chỉ dùng khi quan hệ chiều sâu rõ ràng, không suy đoán phối cảnh.
+Inside / Outside
+Inside the open basket.
+Chỉ dùng khi ranh giới/quan hệ thấy trực tiếp.
+
+Examples — QUESTION (ENGLISH) + ANSWER
+Spatial subtype
+QUESTION (ENGLISH) · ANSWER
+Target / Reference
+Left / Right
+Q Where is the small red bucket relative to the bicycle with the yellow front basket?
+A To the right of the bicycle.
+Target: Red bucketRef: Bicycle with yellow basket
+Left / Right
+Q Where is the white shopping bag relative to the blue suitcase beside the market cart?
+A To the left of the suitcase.
+Target: White shopping bagRef: Blue suitcase
+Between
+Q Where is the small blue pouch relative to the red backpack and the yellow backpack on the bench?
+A Between the two backpacks.
+Target: Blue pouchRef: Red backpack; yellow backpack
+Left / Right
+Q Where is the black thermos relative to the purple backpack on the café table?
+A To the left of the backpack.
+Target: Black thermosRef: Purple backpack
+Left / Right
+Q Where is the pink coin purse relative to the black wallet on the stall counter?
+A To the right of the wallet.
+Target: Pink coin purseRef: Black wallet
+Left / Right
+Q Where is the silver bicycle bell relative to the blue handlebar pouch?
+A To the left of the pouch.
+Target: Silver bicycle bellRef: Blue handlebar pouch
+Left / Right
+Q Where is the white folded napkin relative to the black mug on the café counter?
+A To the right of the mug.
+Target: White folded napkinRef: Black mug
+Left / Right
+Q Where is the orange keychain relative to the blue handbag on the display hook?
+A To the right of the handbag.
+Target: Orange keychainRef: Blue handbag
+Above / Below
+Q Where is the tiny yellow flag relative to the red market canopy?
+A Above the canopy.
+Target: Yellow flagRef: Red canopy
+Above / Below
+Q Where is the striped scarf relative to the red tote bag on the bench?
+A Above the tote bag.
+Target: Striped scarfRef: Red tote bag
+Above / Below
+Q Where is the yellow lunchbox relative to the green water bottle beside the stroller?
+A Below the water bottle.
+Target: Yellow lunchboxRef: Green water bottle
+Above / Below
+Q Where is the small striped mitten relative to the blue wool hat on the rack?
+A Below the hat.
+Target: Striped mittenRef: Blue wool hat
+Above / Below
+Q Where is the small purple ribbon relative to the orange shopping bag on the shelf?
+A Above the bag.
+Target: Purple ribbonRef: Orange shopping bag
+Above / Below
+Q Where is the white paper lantern relative to the blue bicycle parked at the stall?
+A Above the bicycle.
+Target: White paper lanternRef: Blue bicycle
+Between
+Q Where is the red baseball cap relative to the blue cap and the yellow cap on the shelf?
+A Between the blue cap and the yellow cap.
+Target: Red baseball capRef: Blue cap; yellow cap
+Between
+Q Where is the small white toy car relative to the green toy bus and the blue toy truck on the display shelf?
+A Between the two vehicles.
+Target: White toy carRef: Green bus; blue truck
+Between
+Q Where is the red flowerpot relative to the white flowerpot and the grey watering can?
+A Between the flowerpot and the watering can.
+Target: Red flowerpotRef: White flowerpot; grey watering can
+In front of / Behind
+Q Where is the small orange flowerpot relative to the grey mailbox outside the kiosk?
+A In front of the mailbox.
+Target: Orange flowerpotRef: Grey mailbox
+In front of / Behind
+Q Where is the small blue crate relative to the red handcart at the stall?
+A Behind the handcart.
+Target: Blue crateRef: Red handcart
+In front of / Behind
+Q Where is the pink dog bowl relative to the dog wearing a blue collar?
+A In front of the dog.
+Target: Pink dog bowlRef: Dog with blue collar
+In front of / Behind
+Q Where is the small brown suitcase relative to the silver luggage trolley?
+A Behind the trolley.
+Target: Brown suitcaseRef: Silver trolley
+Inside / Outside
+Q Where is the yellow rubber duck relative to the open green basket?
+A Inside the basket.
+Target: Yellow rubber duckRef: Open green basket
+Inside / Outside
+Q Where is the red scarf relative to the open blue shopping bag?
+A Inside the shopping bag.
+Target: Red scarfRef: Blue shopping bag
+Inside / Outside
+Q Where is the small blue bottle relative to the open red cooler?
+A Inside the cooler.
+Target: Blue bottleRef: Red cooler
+Mỗi example chỉ hợp lệ nếu target và reference(s) thực sự được định danh duy nhất; không được suy diễn vị trí từ mô tả mà không quan sát ảnh.
+
+3.2. SPATIAL — QUY TẮC CHẤT LƯỢNG (TIẾP)
+5 quy tắc bắt buộc
+1.  Question phải gọi tên target và reference đủ cụ thể để xác định đúng object trong toàn ảnh.
+2.  Đáp án là relative location của target SO VỚI reference; ưu tiên “To the left/right of ...”, “Above/Below ...”.
+3.  Cho phép tối đa 2 discrete reference objects. Reference bbox là optional; target bbox là bắt buộc.
+4.  Reference được phép lớn hơn 0.1% ảnh. Chỉ target phải nhỏ hơn ngưỡng này.
+5.  Không dùng vague relations (“near”, “around”, “somewhere behind”) nếu có nhiều cách hiểu.
+Phân biệt Spatial với Attribute / Relation
+Question (ENGLISH)
+Question Type
+Vì sao?
+Where is the red backpack relative to the bicycle with a yellow basket?
+Spatial
+Hỏi trực tiếp vị trí; answer = Left / Right / ...
+What color is the scarf of the person in a checkered coat standing right of a bicycle?
+Attribute
+Cue chính = checkered coat; spatial chỉ bổ trợ. Answer = color.
+What pattern is on the scarf worn by the cyclist pushing a bicycle?
+Relation
+Dùng “pushing” để tìm target, rồi hỏi pattern.
+
+Spatial Question không hợp lệ
+INVALID
+Sửa / xử lý
+Is the red bag to the left of the bicycle?
+Yes/No bị cấm → hỏi “Where is ... relative to ...?”
+Where is the red bag in the image?
+Không có discrete reference; dùng object mốc rõ ràng.
+Where is the backpack near the crowd?
+“The crowd” không xác định đúng một reference instance.
+Where is the red bag relative to the car? (có 5 cars)
+Thêm visible cues để định danh car duy nhất.
+What color is the bag to the right of the scooter? (gán Spatial)
+Sai: spatial là cue chính nhưng answer là color. Viết lại thành Attribute có attribute cue chính, hoặc hỏi vị trí.
+
+
+3.3. RELATION — TƯƠNG TÁC LÀ CUE
+Interaction giữa target và một reference object là cue chính giúp tìm target; câu hỏi vẫn yêu cầu answer về thuộc tính/hành động/trạng thái thấy rõ, KHÔNG phải vị trí tương đối.
+Target / Main Cue
+QUESTION (ENGLISH) · ANSWER
+Answer Type
+PersonHolding umbrella
+Q What pattern is on the scarf worn by the person holding the transparent umbrella?A Striped.
+Pattern / Marking
+PersonPushing stroller
+Q What kind of hat is the person pushing the stroller wearing?A A bucket hat.
+Object / Accessory
+BicycleBeing pushed
+Q What is attached to the rear rack of the bicycle being pushed by the person in a blue jacket?A A crate.
+Object / Accessory
+DogLed on leash
+Q What pattern is on the collar of the dog being led on a leash by the child?A Zigzag.
+Pattern / Marking
+PersonRiding bicycle
+Q What color are the gloves worn by the person riding the bicycle?A White.
+Color
+PersonCarrying box
+Q What is the person carrying the cardboard box wearing on their head?A A cap.
+Object / Accessory
+Person / Pulling suitcase
+Q What color is the handle cover on the suitcase being pulled by the person in the blue coat?
+A Red.
+Color
+Person / Holding umbrella
+Q What pattern is on the sleeve of the person holding the bright green umbrella?
+A Checkered.
+Pattern / Marking
+Person / Leading dog
+Q What color is the hat worn by the person leading the spotted dog on a leash?
+A Navy blue.
+Color
+Person / Lifting a box
+Q What accessory is worn on the wrist of the person lifting a cardboard box?
+A A watch.
+Object / Accessory
+Person / Carrying shopping bag
+Q What pattern is on the cap worn by the person carrying the white shopping bag?
+A Striped.
+Pattern / Marking
+Person / Sitting on bench
+Q What shape are the sunglasses worn by the person sitting on the red bench?
+A Round.
+Shape
+Person / Pouring into a cup
+Q What color is the apron worn by the person pouring a drink into a cup?
+A Blue.
+Color
+Bicycle / Leaning against fence
+Q What color is the front basket on the bicycle leaning against the black fence?
+A White.
+Color
+Skateboard / Being carried
+Q What pattern is on the underside of the skateboard carried by the person in the orange jacket?
+A Checkered.
+Pattern / Marking
+Motorcycle / Being pushed
+Q What color is the front wheel rim on the motorcycle being pushed by the person wearing red gloves?
+A Silver.
+Color
+Dog / Holding toy
+Q What pattern is on the collar worn by the dog holding the yellow ball in its mouth?
+A Striped.
+Pattern / Marking
+Person / Pulling trolley
+Q What color are the shoes worn by the person pulling the small green trolley?
+A Yellow.
+Color
+Person / Carrying parasol
+Q What color is the backpack worn by the person carrying the striped parasol?
+A Pink.
+Color
+Person / Handing over a bag
+Q What color is the scarf worn by the person handing a shopping bag to the customer?
+A Red.
+Color
+Person / Riding skateboard
+Q What shape are the knee pads worn by the person riding the skateboard?
+A Oval.
+Shape
+Bird / Perched on handlebars
+Q What color is the beak of the bird perched on the bicycle handlebar?
+A Orange.
+Color
+Cart / Being pulled by horse
+Q What color is the cloth tied to the cart being pulled by the horse?
+A Blue.
+Color
+Stroller / Being pushed
+Q What shape is the toy hanging from the stroller being pushed by the person in the yellow coat?
+A Star-shaped.
+Shape
+Person / Touching mailbox
+Q What pattern is on the shirt worn by the person resting a hand on the green mailbox?
+A Polka dots.
+Pattern / Marking
+Person / Washing a window
+Q What color are the gloves worn by the person wiping the shop window with a cloth?
+A Purple.
+Color
+
+Relation hợp lệ phải nhìn thấy trực tiếp
+•  Ưu tiên holding, wearing, carrying, riding, pushing, pulling, leading on leash... nếu hành động/tiếp xúc nhìn rõ.
+•  Không dùng owns, likes, wants, waiting for, about to... vì phải suy luận ý định hoặc sở hữu.
+•  Nếu hỏi vị trí của target so với reference thay vì thuộc tính, gán Spatial bất kể có cue tương tác.
+•  Không dùng tương tác để đánh lạc hướng khi vẫn có nhiều target phù hợp.
+3.4. 12 LỖI DỄ MẮC — INVALID / CẦN SỬA
+Các ví dụ dưới đây là anti-examples. KHÔNG sao chép trực tiếp làm Q&A hợp lệ.
+# · Lỗi
+INVALID / HƯỚNG SỬA
+01 · Lộ answer
+“What color is the red backpack?” → Hỏi một chi tiết khác chưa được cho sẵn.
+02 · Không unique
+“Where is the bag relative to the bicycle?” có nhiều bags/bicycles → thêm cues xác định đúng 2 instances.
+03 · Sai type
+“What color is the helmet to the left of the bus?” bị gán Spatial → phải là Attribute.
+04 · Spatial Yes/No
+“Is the bucket above the cart?” → hỏi “Where is the bucket relative to the cart?”
+05 · Reference mơ hồ
+“Where is the bag near the crowd?” → dùng 1–2 discrete reference objects.
+06 · > 2 references
+Vị trí target dựa vào 3–4 mốc → rút gọn còn tối đa 2 objects.
+07 · Sai target bbox
+Hỏi về person nhưng bbox tô scarf trong answer → vẽ bbox person.
+08 · Bbox quá lớn
+Target bbox chiếm ≥ 0.1% diện tích ảnh → đổi target/ảnh; không cố bóp bbox sai.
+09 · Suy diễn
+“What is the owner of the red scooter carrying?” → không thể nhìn ra ownership.
+10 · OCR / Count
+Đọc biển số, chữ trên áo hoặc “How many...?” → loại hoàn toàn cả cue lẫn answer.
+11 · OtherImage trả lời được
+OtherImage có target đúng mô tả, answer dù giống GT → không được dùng làm distractor.
+12 · Duplicate images
+Cùng ảnh trong 20 ảnh hoặc GT lặp ở sample khác → thay ảnh, không submit.
+
+NGUYÊN TẮC:  Nếu không thể chứng minh target duy nhất, answer khách quan và toàn bộ 19 OtherImages không trả lời được câu hỏi, hãy REWRITE / REJECT thay vì submit cho đủ số lượng.
+
+
+4. VIẾT QUESTION & ANSWER THỰC SỰ HỢP LỆ
+Chất lượng quan trọng hơn việc cố tạo câu hỏi khó. Mỗi sample chỉ có 01 Question và 01 Answer, đều viết bằng English.
+4.1. Uniqueness — chỉ một target trong GT
+•  Tất cả cues kết hợp phải trỏ đến đúng 01 target; không yêu cầu số cues cố định.
+•  Sau khi viết, quét toàn bộ GT và zoom vào các objects có khả năng giống target.
+•  Với Spatial, target và reference(s) phải đều xác định duy nhất, quan hệ không gian không bị tranh cãi.
+4.2. Answer — ngắn, khách quan, có thể kiểm tra
+•  Attribute / Relation: answer ngắn như “Blue”, “A helmet”, “Striped”, “Folded”.
+•  Spatial: answer dạng “To the left of the blue bicycle”, “Below the umbrella”; tránh “over there”, “nearby”.
+•  Không đưa nhiều đáp án có thể đúng, câu trả lời không chắc chắn, hoặc mô tả dài không cần thiết.
+4.3. Search relevance — cần quan sát target nhỏ
+•  Question không được trả lời chỉ bằng ngôn ngữ, dự đoán category, hoặc nhìn thumbnail mà không tìm target.
+•  Ưu tiên target nhỏ hòa lẫn vào cảnh đông objects, và các cues đủ phân biệt với distractors.
+•  Không bắt buộc mỗi câu phải cực khó; tuyệt đối không đánh đổi tính đúng để tăng độ khó.
+4.4. Tối ưu một Q&A trước khi chọn OtherImages
+Câu chưa tốt
+Cải thiện
+What color is the bag?
+Thêm cues nhận diện instance duy nhất: “What color is the bag carried by the cyclist wearing a checkered shirt?”
+Where is the helmet?
+Đổi thành quan hệ có mốc: “Where is the red helmet relative to the bicycle with the yellow basket?”
+What is the person doing?
+Chọn target rõ hơn và cụ thể hành động nhìn thấy: “What is the person wearing a striped cap doing with their hands?”
+
+GHI NHỚ:  Một Q&A tốt phải đồng thời hợp lệ trên GT Image và có thể ghép với 19 OtherImages mà không làm mất K = 1.
+
+
+5. VẼ GROUND-TRUTH BBOX
+Bbox dành cho target instance được question định danh, KHÔNG mặc định là object xuất hiện trong answer.
+Đúng cách
+Không làm
+Vẽ axis-aligned bbox sát phần nhìn thấy của target, kể cả target nằm ở mép ảnh.
+Không vẽ amodal box, không đoán phần khuất; không tô cả nhóm/region.
+Kiểm tra bbox_area_ratio < 0.001 bằng kích thước ảnh gốc.
+Không bóp bbox để dưới ngưỡng khi nó không còn bao trọn target nhìn thấy.
+Spatial: target có bbox bắt buộc, tối đa 2 reference objects và bbox references optional.
+Không thay target bbox bằng reference bbox chỉ vì reference lớn/dễ tìm hơn.
+Nếu bbox reference được lưu thì khoanh đúng discrete object làm mốc.
+Không lưu cả scene, background hoặc answer object thành reference sai vai trò.
+
+5.1. Phân biệt Target / Reference / Answer Object
+Vai trò
+Ví dụ
+Target
+Question: “What color is the scarf worn by the person holding the umbrella?” → target = person.
+Reference
+Question Spatial: “Where is the blue pouch relative to the red suitcase?” → reference = red suitcase.
+Answer object
+Question hỏi scarf color → scarf là chi tiết để trả lời; KHÔNG thay person bbox bằng scarf.
+
+5.2. Kiểm tra bbox trước khi lưu
+1.  Zoom vào target; vẽ bbox sát viền phần nhìn thấy.
+2.  Thu nhỏ về toàn ảnh và xác nhận bbox không nhầm instance.
+3.  Kiểm tra cảnh báo tỷ lệ kích thước trên platform (nếu có); target phải < 0.1%.
+4.  Nếu sai ngưỡng, đổi target hoặc ảnh, không cắt bbox nhỏ hơn object.
+LƯU Ý:  Chỉ target bbox bắt buộc dưới 0.1%. Reference bbox (nếu lưu) không bị giới hạn bởi ngưỡng này.
+
+
+6. CHỌN 19 OTHERIMAGES — BẢO ĐẢM K = 1
+Hoàn thành single-image annotation trước, sau đó mới chọn 19 OtherImages. Đây là bước quan trọng nhất để biến một Q&A đơn ảnh thành sample multi-image hợp lệ.
+6.1. Quy tắc chọn OtherImages
+•  Trong cùng 01 sample: phải có 20 image IDs khác nhau, gồm 01 GT và 19 OtherImages; không được lặp, crop hoặc resize cùng ảnh để tính thành ảnh mới.
+•  Giữa các samples: có thể tái sử dụng OtherImages. Không được reuse GT Image cho một sample GT khác.
+•  OtherImages phải thuộc image pool high-resolution hợp lệ. Ưu tiên category/scene/objects tương đồng hoặc distractors liên quan, nhưng KHÔNG bắt buộc.
+•  Không chọn OtherImage nếu bất kỳ object nào trong đó có thể thỏa mọi cues trong question và cung cấp đủ evidence để trả lời.
+•  Một OtherImage đưa ra cùng answer với GT cũng bị loại nếu question có thể được trả lời từ ảnh đó.
+6.2. Phân biệt OtherImage hợp lệ và không hợp lệ
+Giả sử GT hỏi: “What color is the backpack carried by the person immediately to the right of the cyclist wearing a yellow jacket?” → Answer: Red.
+OtherImage
+Đánh giá
+Lý do
+Có đúng person/cyclist như mô tả; backpack màu blue.
+INVALID
+Ảnh có thể trả lời question, dù answer khác GT.
+Có đúng person/cyclist như mô tả; backpack màu red.
+INVALID
+Ảnh có thể trả lời question, dù answer trùng GT.
+Có nhiều persons và bicycles; không có đối tượng nào thỏa đủ cues.
+VALID
+Có distractors nhưng không cung cấp answer cho Q.
+Không có tương tác/mốc được yêu cầu trong question.
+VALID
+Không thể giải quyết đầy đủ cues để trả lời.
+Target trông có thể phù hợp nhưng answer bị che/mờ.
+NÊN LOẠI
+Quá mơ hồ; có rủi ro Q cũng áp dụng được cho ảnh.
+
+ĐIỀU KIỆN CỐT LÕI:  Trong 20 ảnh, đúng 01 ảnh cung cấp đủ bằng chứng để trả lời Question. “K = 1” không có nghĩa là chỉ một ảnh có cùng màu/object category; nó là một ảnh có thể trả lời đầy đủ question.
+
+
+6.3. Các bước tự kiểm từng OtherImage
+1.  Đọc lại Question đầy đủ, không chỉ nhìn Answer.
+2.  Mở OtherImage và tìm mọi instance có thể thỏa mô tả target, nhất là ở các vùng nhỏ.
+3.  Kiểm tra từng cue: thuộc tính định danh, tương tác và reference(s) nếu có.
+4.  Hỏi: “Nếu chỉ xem ảnh này, có thể đưa ra answer hợp lệ cho chính Question không?” Nếu CÓ hoặc không chắc, loại ảnh.
+5.  Lặp lại đến khi có đủ 19 ảnh hợp lệ; kiểm tra không có image ID nào bị trùng trong sample.
+6.4. Trường hợp Spatial Question
+Ví dụ: “Where is the small red bucket relative to the bicycle with the yellow front basket?” → “To the right of the bicycle.”
+Tình huống OtherImage
+Quyết định
+Có small red bucket và đúng bicycle mốc, bucket ở bên trái.
+INVALID — vẫn trả lời được Spatial Q với đáp án khác.
+Có small red bucket và đúng bicycle mốc, bucket ở bên phải.
+INVALID — trả lời được dù cùng answer.
+Có bicycle mốc nhưng không có đúng target bucket.
+VALID nếu không có target khác thỏa toàn bộ question.
+Có red bucket và một bicycle khác nhưng mốc không đúng đầy đủ cues.
+Có thể VALID; phải kiểm tra thật kỹ không hình thành cặp hợp lệ khác.
+
+6.5. Khi không tìm được đủ 19 OtherImages
+•  Thử các ảnh khác trong nguồn được phân công; không tự ý tạo ảnh mới, chỉnh sửa ảnh hoặc thay đổi bằng chứng.
+•  Nếu question quá chung và liên tục khiến các ảnh khác trả lời được, hãy viết lại question trên GT bằng visible cues phân biệt hơn.
+•  Sau bất kỳ lần sửa Q/A nào, kiểm tra lại TOÀN BỘ OtherImages đã chọn vì trạng thái hợp lệ có thể thay đổi.
+•  Nếu vẫn không tạo được sample K = 1 hợp lệ, bỏ sample và chuyển sang GT Image khác.
+
+7. CHECK TRƯỚC KHI SUBMIT
+Annotator tự xác minh trên toàn bộ 20 ảnh. Không có vòng correction/verify bắt buộc giữa các annotators.
+□  Đã có đúng 01 GT Image và 19 OtherImages với 20 image IDs khác nhau.
+□  GT Image chưa được dùng làm GT của sample khác.
+□  Đúng 01 Q&A/sample; Question/Answer đều viết bằng English.
+□  Question type đúng: Attribute / Spatial (as Answer) / Relation.
+□  Không có OCR / Text / Digits, Count, Presence / Yes–No, Material / Subjective, suy diễn.
+□  Trong GT, chỉ 01 target thỏa tất cả cues; answer xác minh được qua pixels.
+□  Bbox target ôm sát phần nhìn thấy và bbox_area_ratio < 0.001.
+□  Spatial có 1–2 discrete references xác định duy nhất, answer là vị trí tương đối; reference bbox có thể bỏ trống.
+□  Tất cả 19 OtherImages đã được zoom/kiểm tra, không ảnh nào trả lời được Q (dù cùng answer).
+□  Đã lưu đủ 20 images, Q/A, type và bbox trên platform; sample ở trạng thái hoàn tất.
+NẾU KHÔNG CHẮC:  REWRITE / REJECT. Không submit sample thiếu bằng chứng hoặc không bảo đảm K = 1 chỉ để đủ 100 samples.
+
+8. THÔNG TIN LƯU TRÊN PLATFORM & EXPORT
+Bắt buộc theo sample
+Optional / platform tự tính
+GT image ID; danh sách 19 OtherImage IDs
+Sample ID / annotator ID / timestamp (nếu platform tự lưu)
+Question type: Attribute / Spatial / Relation
+Tối đa 2 reference bboxes (khi có ích để audit)
+Question (EN); Answer (EN)
+bbox_area_ratio; bbox size warning (nếu platform hỗ trợ)
+01 target bbox; sample đã tự kiểm K = 1
+Tình trạng hoàn tất / ghi chú kiểm chứng (nếu có)
+
+BÀN GIAO: Hoàn tất và export trực tiếp từ annotation platform theo cơ chế được hướng dẫn. Không cần tự tạo file Excel/JSON riêng. Mỗi annotator nộp đủ 100 samples hợp lệ trước 23:59 ngày 02/11/2026.
+
+PHỤ LỤC A. VÍ DỤ 01 SAMPLE HOÀN CHỈNH
+Ví dụ mô phỏng để hiểu quy trình. Không sử dụng trực tiếp nếu chưa có ảnh và bằng chứng thực tế.
+Thành phần
+Giá trị mẫu
+GT Image
+Image_G — ảnh đường phố UHD với các chi tiết nhỏ.
+Question Type
+Spatial
+Question (EN)
+Where is the small red bucket relative to the bicycle with the yellow front basket?
+Answer (EN)
+To the right of the bicycle.
+Target bbox
+BBox của red bucket (tính trên ảnh gốc); tỷ lệ < 0.1%.
+Reference bbox
+Bicycle — optional, chỉ cần khi hỗ trợ audit.
+OtherImages
+Image_O01...Image_O19; 19 ảnh riêng biệt, không ảnh nào trả lời được Q.
+Sample status
+K = 1; N = 20; self-checked; saved on platform.
+
+QUY TẮC CUỐI CÙNG:  100 samples hợp lệ quan trọng hơn 100 samples có vấn đề. Với mỗi sample, hãy chắc chắn rằng model phải tìm đúng 01 ảnh và 01 target rất nhỏ để trả lời.
