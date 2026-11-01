@@ -19,7 +19,7 @@ Mở http://localhost:8791 bằng Chrome / Edge. Dùng HTTPS hoặc localhost đ
 4. Pool 100 ảnh riêng cho từng GT. Shuffle ưu tiên ảnh chưa có trong pool trước, giữ 19 ảnh đã chọn. Nếu nguồn không đủ 100, hiển thị tất cả ảnh còn lại và thông báo số thực tế; nguồn ít thì các pool có thể trùng. Ảnh đã chọn được hiển thị riêng ở đầu grid, không chiếm pool sau shuffle.
 5. Mở mỗi ảnh, zoom/pan kiểm tra, rồi xác nhận không thể trả lời Q. Chọn đúng 19; không có chọn hàng loạt. Sửa Q/A, type, references hay bbox hủy tất cả xác nhận và đưa sample về draft.
 6. Hoàn thành 5 checklist rồi Lưu hoàn tất. Một record cho mỗi GT. Không tự xác minh ngữ nghĩa hoặc K=1 bằng máy; annotator chịu trách nhiệm xác nhận. Phần mềm chặn số lượng, bbox, IDs, thiếu review, một số mẫu Count/Yes–No; checklist bao quát English, OCR, cues và chất lượng thị giác.
-7. Export sample hoặc toàn bộ sample hoàn tất. ZIP có `annotations.json` và ảnh gốc tại `images/<sha256>/<filename>`. Record gồm K/N, GT/Other IDs, Q/A/type, target bbox xywh pixel gốc, ratio, annotator, timestamps, checks, reviews và manifest ảnh. ZIP có giới hạn 3.5 GB tổng ảnh cho mỗi lần export để tránh giới hạn ZIP32; export từng sample nếu vượt.
+7. Export sample hoặc toàn bộ sample hoàn tất thành file JSON, không kèm ảnh. Manifest chứa ID, tên và source_path để đối chiếu ảnh gốc.
 
 ## Lưu trữ và backup
 
@@ -35,3 +35,7 @@ node --check dist/app.mjs
 ```
 
 `test.mjs` kiểm tra strict bbox threshold, sampling, 19 IDs/review/checklist, Spatial, banned forms và ZIP. Đã kiểm thử Chromium end-to-end với ảnh giả lập: import folders, draw/reject, shuffle, chọn 19, complete/export, reload, invalidation, GT isolation, responsive.
+
+## Backup local tự động
+
+Bấm **Bật / tiếp tục backup local**, chọn thư mục và cấp quyền ghi một lần trên Chrome/Edge desktop. Web lưu handle trong IndexedDB và tự cập nhật `hrvs_workspace_backup.json` sau 600 ms khi annotation/pool/dataset thay đổi, bao gồm cả draft. Ghi file được tuần tự và dùng createWritable để thay thế file sau khi ghi thành công. Có trạng thái lần lưu cuối và thông báo khi lỗi/quyền bị thu hồi. Khi mở lại, bấm tiếp tục nếu trình duyệt yêu cầu cấp lại quyền. Trình duyệt không hỗ trợ File System Access vẫn tự lưu IndexedDB và có backup thủ công. Backup không chứa ảnh.
